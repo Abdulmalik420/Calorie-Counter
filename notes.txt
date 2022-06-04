@@ -1,4 +1,0 @@
-TODO:
-User inputs:
-	-Make it a dirctory
-	-
