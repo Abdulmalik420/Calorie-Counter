@@ -2,41 +2,48 @@ import os
 import datetime
 
 x = datetime.datetime.now()
-todayDate = x.strftime("%B %d")
 nowDate = x.strftime("%d")
 nowMonth = x.strftime("%B")
 
 def newUserVerify():
     users = input("Please type in your new username: ")
-    if(os.path.isfile(users) == False):
-        fp = open(users, "w")
-        fp.write('Calorie Counter')
-        fp.close()
+    if(os.path.exists(users) == False):
+        os.mkdir(users)
         print("New " + users + " created")
-    elif(os.path.isfile(users) == True):
-        print("User already exists")
-        newUserVerify()
+        dateVerify(users)
     else:
-        print("User " + users + " does not exist")
+        print("User already exists")
         newUserVerify()
 
 def userVerify():
     users = input("Please type in your username: ")
-    if(os.path.isfile(users) == True):
-        print("User Verified")
-        calorieAdder(users)
-    else:
-        print("User " + users + " does not exist")
+    if(os.path.exists(users) == False):
+        print("This user does not exist. Try again")
         userVerify()
-
-def calorieAdder(users):
+    else:
+        print("User verified")
+        dateVerify(users)
+    
+def dateVerify(users):
     userStatus = input("Would you like to add Caloried for " + nowMonth + " " + nowDate + " (yes/no): ") 
     if(userStatus.lower() == "yes"):
-        print("Please type in the format of (Item-Calories)")
+        calorieAdder(users)
     elif(userStatus.lower() == "no"):
         print("What date would you like to add Calories to")
-        month = input("Month: ")
+        print("Month: " + nowMonth)
         date = input("Date: ")
+        if ((date.isnumeric() == False) or (date > nowDate)):
+            print("Can't input data for the future")
+            dateVerify(users)
+        else:
+            calorieAdder(users)
+    else:
+        print("Please enter yes or no")
+        dateVerify(users)
+    
+def calorieAdder(users):
+    pass
+
 
 print("Welcome to your personal Calorie Counter\n")
 userStatus = input("Are you a new user (yes/no)")
