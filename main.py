@@ -25,12 +25,12 @@ def userVerify():
         dateVerify(users)
     
 def dateVerify(users):
-    userStatus = input("Would you like to add Caloried for " + nowMonth + " " + nowDate + " (yes/no): ") 
+    userStatus = input(f"Would you like to add Caloried for {nowMonth} {nowDate} (yes/no): ") 
     if(userStatus.lower() == "yes"):
         calorieAdder(users, nowDate)
     elif(userStatus.lower() == "no"):
         print("What date would you like to add Calories to")
-        print("Month: " + nowMonth)
+        print(f"Month:{nowMonth}")
         date = input("Date: ")
         if ((date.isnumeric() == False) or (date > nowDate)):
             print("Can't input data for the future")
@@ -46,6 +46,8 @@ def calorieAdder(users, date):
     os.chdir(users)
     fp = open(todayDate, "w")
     fp.write(todayDate)
+    print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie-Per Item/Gram)")
+    print("When you finish inputing the calories please input |q| in order to quit")
     fp.close()
 
 print("Welcome to your personal Calorie Counter\n")
