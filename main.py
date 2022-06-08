@@ -1,5 +1,6 @@
 import os
 import datetime
+import csv
 
 x = datetime.datetime.now()
 nowDate = x.strftime("%d")
@@ -44,11 +45,17 @@ def dateVerify(users):
 def calorieAdder(users, date):
     todayDate = nowMonth + date
     os.chdir(users)
-    fp = open(todayDate, "w")
-    fp.write(todayDate)
-    print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie-Per Item/Gram)")
+    print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie)")
     print("When you finish inputing the calories please input |q| in order to quit")
-    fp.close()
+    with open(todayDate, 'w', encoding = 'UTF8', newline = '') as f:
+        writer = csv.writer(f)
+        header = ['Item', 'Quantity', 'Calories']
+        choose = input()
+        writer.writerow(header)
+        while choose!='q':
+            calories = choose.split("-")
+            writer.writerow(calories)
+            choose = input()
 
 def grapher(user):
     print(f"This will graph for {user}")
@@ -56,12 +63,16 @@ def grapher(user):
 def weightAdder(user, date):
     print(f"This will add weight for {user} for the date of {date}") 
 
+def calorieCal(user, date):
+    print(f"This will calculate the total calories for {nowMonth} {date}")
+
 def menu(user, date):
     print("-----------------------------------")
     print("Welcome to the Menu.") 
     print("Press 1 to display a graph")
     print("Press 2 to add more calores")
     print("Press 3 to add a weight")
+    print(f"Press 4 to get a summary for {nowMonth} {date}")
     menu = input("Please type your choice here: ")
     print("----------------------------------")
     match menu:
@@ -71,11 +82,14 @@ def menu(user, date):
             calorieAdder(user, date)
         case'3':
             weightAdder(user, date)
+        case'4':
+            calorieCal(user, date)
         case default:
             print("Unaviable menu choice. Please try again")
             menu(user, date)
 
-print("Welcome to your personal Calorie Counter\n")
+print("Welcome to your personal Calorie Counter")
+print("----------------------------------")
 userStatus = input("Are you a new user (yes/no)")
 
 while(userStatus.lower() != ("yes") or ("no")):
