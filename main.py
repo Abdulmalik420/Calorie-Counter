@@ -1,6 +1,7 @@
 import os
 import datetime
 import csv
+import pandas as pd
 
 x = datetime.datetime.now()
 nowDate = x.strftime("%d")
@@ -43,19 +44,28 @@ def dateVerify(users):
         dateVerify(users)
     
 def calorieAdder(users, date):
-    todayDate = nowMonth + date
+    counter = 0
     os.chdir(users)
     print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie)")
-    print("When you finish inputing the calories please input |q| in order to quit")
-    with open(todayDate, 'w', encoding = 'UTF8', newline = '') as f:
-        writer = csv.writer(f)
-        header = ['Item', 'Quantity', 'Calories']
-        choose = input()
-        writer.writerow(header)
-        while choose!='q':
-            calories = choose.split("-")
-            writer.writerow(calories)
-            choose = input()
+    count = input("Please input the amount items you want to input: ")
+    count = int(count)
+    itemArray = []
+    quantityArray = []
+    caloriesArray = []
+    while (counter != count):
+        item = input("Item: ")
+        itemArray.append(item)
+        quantity = input("Quantity: ")
+        quantity = int(quantity)
+        quantityArray.append(quantity)
+        calories = input("Calories: ")
+        calories = int(calories)
+        caloriesArray.append(calories)
+        titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray})
+        data = pd.DataFrame(titledColumn)
+        counter += 1
+        if(counter == count):
+            data.to_csv(date)
 
 def grapher(user):
     print(f"This will graph for {user}")
@@ -64,26 +74,32 @@ def weightAdder(user, date):
     print(f"This will add weight for {user} for the date of {date}") 
 
 def calorieCal(user, date):
-    print(f"This will calculate the total calories for {nowMonth} {date}")
+    os.chdir(user) 
+    print(f"This will calculate the total calories for {date}")
+    df = pd.read_csv(date)
+    print(df.to_string())
+    select_column = date["Calories"]
+    print(select_column)
 
 def menu(user, date):
+    todayDate = nowMonth + date 
     print("-----------------------------------")
     print("Welcome to the Menu.") 
     print("Press 1 to display a graph")
     print("Press 2 to add more calores")
     print("Press 3 to add a weight")
-    print(f"Press 4 to get a summary for {nowMonth} {date}")
+    print(f"Press 4 to get a summary for {todayDate}")
     menu = input("Please type your choice here: ")
     print("----------------------------------")
     match menu:
         case'1':
             grapher(user)
         case'2':
-            calorieAdder(user, date)
+            calorieAdder(user, todayDate)
         case'3':
-            weightAdder(user, date)
+            weightAdder(user, todayDate)
         case'4':
-            calorieCal(user, date)
+            calorieCal(user, todayDate)
         case default:
             print("Unaviable menu choice. Please try again")
             menu(user, date)

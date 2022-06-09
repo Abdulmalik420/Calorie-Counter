@@ -1,2 +1,3 @@
-Item,Quantity,Calories
-food,1,500
+,Item,Quantity,Calories
+0,egg,2,2
+1,food,2,33
