@@ -1,3 +1,4 @@
-	Item	Quantity	Calories
-0	food	2	2
-1	sugar	2	2
+Item	Quantity	Calories
+egg	2	2
+egg	3	3
+potato	1	100

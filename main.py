@@ -65,7 +65,10 @@ def calorieAdder(users, date):
         data = pd.DataFrame(titledColumn)
         counter += 1
         if(counter == count):
-            data.to_csv(date, sep="\t")
+            if(os.path.exists(date)):
+                data.to_csv(date, sep="\t", mode='a', header=False, index=False)
+            else:
+                data.to_csv(date, sep="\t", index=False)
 
 def grapher(user):
     print(f"This will graph for {user}")
