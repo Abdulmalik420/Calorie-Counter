@@ -67,9 +67,10 @@ def calorieAdder(users, date):
         if(counter == count):
             if(os.path.exists(date)):
                 data.to_csv(date, sep="\t", mode='a', header=False, index=False)
+                menu(users, date)
             else:
                 data.to_csv(date, sep="\t", index=False)
-
+                menu(users, date)
 def grapher(user):
     print(f"This will graph for {user}")
 
@@ -92,6 +93,7 @@ def menu(user, date):
     print("Press 2 to add more calores")
     print("Press 3 to add a weight")
     print(f"Press 4 to get a summary for {todayDate}")
+    print("Press q to quit")
     menu = input("Please type your choice here: ")
     print("----------------------------------")
     match menu:
@@ -103,6 +105,8 @@ def menu(user, date):
             weightAdder(user, todayDate)
         case'4':
             calorieCal(user, todayDate)
+        case'q':
+            print("Thank you for using the Calorie Counter")
         case default:
             print("Unaviable menu choice. Please try again")
             menu(user, date)
