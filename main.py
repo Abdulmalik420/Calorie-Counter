@@ -2,6 +2,7 @@ import os
 import datetime
 import csv
 import pandas as pd
+from tabulate import tabulate
 
 x = datetime.datetime.now()
 nowDate = x.strftime("%d")
@@ -43,15 +44,22 @@ def dateVerify(users):
         print("Please enter yes or no")
         dateVerify(users)
     
-def calorieAdder(users, date):
+def calorieAdder(users, date, nowDate):
     counter = 0
     os.chdir(users)
+    if(os.path.exists(nowMonth) == True):
+        os.chdir(nowMonth)
+    else:
+        os.mkdir(nowMonth)
+        os.chdir(nowMonth)
     print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie)")
     count = input("Please input the amount items you want to input: ")
     count = int(count)
     itemArray = []
     quantityArray = []
     caloriesArray = []
+    perArray = []
+    totalArray = []
     while (counter != count):
         item = input("Item: ")
         itemArray.append(item)
@@ -61,29 +69,34 @@ def calorieAdder(users, date):
         calories = input("Calories: ")
         calories = int(calories)
         caloriesArray.append(calories)
-        titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray})
+        perAmount = input("Per amount: ")
+        perAmount = int(perAmount)
+        perArray.append(perAmount)
+        total = (quantity/perAmount)*calories
+        totalArray.append(total)
+        titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray, "Per Amount": perArray, "Total": totalArray})
         data = pd.DataFrame(titledColumn)
+        data.loc["Full Total"] = pd.Series(data["Total"].sum(), index = ["Total"])
         counter += 1
         if(counter == count):
             if(os.path.exists(date)):
-                data.to_csv(date, sep="\t", mode='a', header=False, index=False)
-                menu(users, date)
+                data.to_csv(date, sep = "\t", mode='a', header=False, index=False)
+                menu(users, nowDate)
             else:
-                data.to_csv(date, sep="\t", index=False)
-                menu(users, date)
+                data.to_csv(date, index=False)
+                menu(users, nowDate)
+
 def grapher(user):
     print(f"This will graph for {user}")
 
 def weightAdder(user, date):
     print(f"This will add weight for {user} for the date of {date}") 
 
-def calorieCal(user, date):
-    os.chdir(user) 
+def tablePrinter(user, date):
+    print(date)
     print(f"This will calculate the total calories for {date}")
     df = pd.read_csv(date)
-    print(df.to_string())
-    select_column = date["Calories"]
-    print(select_column)
+    print(df.to_markdown())
 
 def menu(user, date):
     todayDate = nowMonth + date 
@@ -92,7 +105,7 @@ def menu(user, date):
     print("Press 1 to display a graph")
     print("Press 2 to add more calores")
     print("Press 3 to add a weight")
-    print(f"Press 4 to get a summary for {todayDate}")
+    print(f"Press 4 to get a table of {todayDate}")
     print("Press q to quit")
     menu = input("Please type your choice here: ")
     print("----------------------------------")
@@ -100,11 +113,11 @@ def menu(user, date):
         case'1':
             grapher(user)
         case'2':
-            calorieAdder(user, todayDate)
+            calorieAdder(user, todayDate, date)
         case'3':
             weightAdder(user, todayDate)
         case'4':
-            calorieCal(user, todayDate)
+            tablePrinter(user, todayDate)
         case'q':
             print("Thank you for using the Calorie Counter")
         case default:
