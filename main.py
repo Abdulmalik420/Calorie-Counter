@@ -7,6 +7,7 @@ from tabulate import tabulate
 x = datetime.datetime.now()
 nowDate = x.strftime("%d")
 nowMonth = x.strftime("%B")
+mainPath = os.getcwd()
 
 def newUserVerify():
     users = input("Please type in your new username: ")
@@ -46,6 +47,7 @@ def dateVerify(users):
     
 def calorieAdder(users, date, nowDate):
     counter = 0
+    os.chdir(mainPath)
     os.chdir(users)
     if(os.path.exists(nowMonth) == True):
         os.chdir(nowMonth)
@@ -76,11 +78,11 @@ def calorieAdder(users, date, nowDate):
         totalArray.append(total)
         titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray, "Per Amount": perArray, "Total": totalArray})
         data = pd.DataFrame(titledColumn)
-        data.loc["Full Total"] = pd.Series(data["Total"].sum(), index = ["Total"])
         counter += 1
         if(counter == count):
             if(os.path.exists(date)):
-                data.to_csv(date, sep = "\t", mode='a', header=False, index=False)
+                data.to_csv(date, mode='a', header=False, index=False)
+                print("Added to database")
                 menu(users, nowDate)
             else:
                 data.to_csv(date, index=False)
@@ -93,10 +95,15 @@ def weightAdder(user, date):
     print(f"This will add weight for {user} for the date of {date}") 
 
 def tablePrinter(user, date):
+    os.chdir(mainPath)
+    os.chdir(user)
+    os.chdir(nowMonth)
     print(date)
     print(f"This will calculate the total calories for {date}")
     df = pd.read_csv(date)
     print(df.to_markdown())
+    sumTotal = df['Total'].sum()
+    print(f"Total Calories for {date}: {sumTotal}") 
 
 def menu(user, date):
     todayDate = nowMonth + date 
