@@ -14,3 +14,6 @@ Calorie Counter made in python
 # Future Features I am thinking about
 - Being able to add your weight and see its correlation with how much calories you consume
 - Add a little ML so that with enough information with the amount of calories you eat and your weight to predict what your weight in the future might be
+
+# Contact
+- I am new to coding in python so if you find any major mistakes or you have any suggestions on how to improve this please let me know.
