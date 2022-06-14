@@ -68,10 +68,10 @@ def adderArray():
     return titledColumn
 
 
-def calorieAdder(users, date, nowDate):
+def calorieAdder(user, date, nowDate):
     counter = 0
     os.chdir(mainPath)
-    os.chdir(users)
+    os.chdir(user)
     if(os.path.exists(nowMonth) == True):
         os.chdir(nowMonth)
     else:
@@ -88,10 +88,12 @@ def calorieAdder(users, date, nowDate):
             if(os.path.exists(date)):
                 data.to_csv(date, mode='a', header=False, index=False)
                 print("Added to database")
-                menu(users, nowDate)
+                totalCalculator(user, date, nowDate)
+                menu(user, nowDate)
             else:
                 data.to_csv(date, index=False)
-                menu(users, nowDate)
+                totalCalculator(user, date, nowDate)
+                menu(user, nowDate)
 
 def grapher(user):
     print(f"This will graph for {user}")
@@ -99,16 +101,32 @@ def grapher(user):
 def weightAdder(user, date):
     print(f"This will add weight for {user} for the date of {date}") 
 
+def totalMonthTable(user):
+    os.chdir(mainPath)
+    os.chdir(user)
+    os.chdir(nowMonth)
+    print(f"This is the total Calories for {nowMonth}")
+    df = pd.read_csv('Total.csv')
+    print(df.to_markdown())
+
+def totalCalculator(user, date, nowDate):
+    df = pd.read_csv(date)
+    sumTotal = df['Total'].sum()
+    totaldata = ({"Date": [nowDate], "Total": [sumTotal]})
+    dw = pd.DataFrame(totaldata)
+    if(os.path.exists('Total.csv')):
+        dw.to_csv('Total.csv', mode='a', header=False, index=False)
+    else:
+        dw.to_csv('Total.csv', index=False)
+
 def tablePrinter(user, date):
     os.chdir(mainPath)
     os.chdir(user)
     os.chdir(nowMonth)
     print(date)
-    print(f"This will calculate the total calories for {date}")
+    print(f"This will print your calorie table for {date}")
     df = pd.read_csv(date)
     print(df.to_markdown())
-    sumTotal = df['Total'].sum()
-    print(f"Total Calories for {date}: {sumTotal}") 
 
 def menu(user, date):
     todayDate = nowMonth + date 
@@ -118,6 +136,7 @@ def menu(user, date):
     print("Press 2 to add more calores")
     print("Press 3 to add a weight")
     print(f"Press 4 to get a table of {todayDate}")
+    print(f"Press 5 to get a table for total calories for {nowMonth}")
     print("Press q to quit")
     menu = input("Please type your choice here: ")
     print("----------------------------------")
@@ -130,6 +149,8 @@ def menu(user, date):
             weightAdder(user, todayDate)
         case'4':
             tablePrinter(user, todayDate)
+        case'5':
+            totalMonthTable(user)            
         case'q':
             print("Thank you for using the Calorie Counter")
         case default:
