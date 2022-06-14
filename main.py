@@ -44,7 +44,30 @@ def dateVerify(users):
     else:
         print("Please enter yes or no")
         dateVerify(users)
-    
+
+def adderArray():
+    itemArray = []
+    quantityArray = []
+    caloriesArray = []
+    perArray = []
+    totalArray = []
+    item = input("Item: ")
+    itemArray.append(item)
+    quantity = input("Quantity: ")
+    quantity = int(quantity)
+    quantityArray.append(quantity)
+    calories = input("Calories: ")
+    calories = int(calories)
+    caloriesArray.append(calories)
+    perAmount = input("Per amount: ")
+    perAmount = int(perAmount)
+    perArray.append(perAmount)
+    total = (quantity/perAmount)*calories
+    totalArray.append(total)
+    titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray, "Per Amount": perArray, "Total": totalArray})
+    return titledColumn
+
+
 def calorieAdder(users, date, nowDate):
     counter = 0
     os.chdir(mainPath)
@@ -57,26 +80,8 @@ def calorieAdder(users, date, nowDate):
     print("Please add your calories in this format (Item-Quantity)\nIf you are a new user please add calories in this format (Item-Quantity-Calorie)")
     count = input("Please input the amount items you want to input: ")
     count = int(count)
-    itemArray = []
-    quantityArray = []
-    caloriesArray = []
-    perArray = []
-    totalArray = []
     while (counter != count):
-        item = input("Item: ")
-        itemArray.append(item)
-        quantity = input("Quantity: ")
-        quantity = int(quantity)
-        quantityArray.append(quantity)
-        calories = input("Calories: ")
-        calories = int(calories)
-        caloriesArray.append(calories)
-        perAmount = input("Per amount: ")
-        perAmount = int(perAmount)
-        perArray.append(perAmount)
-        total = (quantity/perAmount)*calories
-        totalArray.append(total)
-        titledColumn = ({"Item": itemArray, "Quantity": quantityArray, "Calories": caloriesArray, "Per Amount": perArray, "Total": totalArray})
+        titledColumn = adderArray()
         data = pd.DataFrame(titledColumn)
         counter += 1
         if(counter == count):
